@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const authRouter = require("./routers/authRouter");
 const postsRouter = require("./routers/postsRouter");
+const { swaggerUi, specs } = require("./swagger"); // Import swagger configuration
 
 const app = express();
 app.use(cors());
@@ -23,8 +24,13 @@ mongoose
     console.log(err);
   });
 
+// Swagger API docs route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+// API routes
 app.use("/api/auth", authRouter);
 app.use("/api/posts", postsRouter);
+
 app.get("/", (req, res) => {
   res.json({ message: "Hello from the server" });
 });
